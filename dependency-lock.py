@@ -46,7 +46,7 @@ for repo in repos:
             packagelock = json.load(json_file)
         for deptype in ['dependencies', 'devDependencies']:
             for dep in package[deptype]:
-                package[deptype][dep] = '=' + packagelock['dependencies'][dep]['version']
+                package[deptype][dep] = packagelock['dependencies'][dep]['version']
     elif os.path.exists('{}/{}'.format(os.getcwd(), 'yarn.lock')):
         insttype = 'yarn'
         with open('yarn.lock') as f:
@@ -57,7 +57,7 @@ for repo in repos:
                 # print('"{}@{}":'.format(dep, package['dependencies'][dep]))
                 for i, lockline in enumerate(content):
                     if '{}@{}'.format(dep, package[deptype][dep]) in lockline:
-                        package[deptype][dep] = '=' + content[i+1].replace('version', '').replace('"', '').strip()
+                        package[deptype][dep] = content[i+1].replace('version', '').replace('"', '').strip()
     with open('package.json', 'w') as json_file:
         json.dump(package, json_file, indent=2)
     run(['rm', '-rf', 'package-lock.json'])
