@@ -4,6 +4,7 @@ import json
 
 org = ''
 repos = ['']
+basebranch = ''
 
 
 def run(args, returnoutput = False):
@@ -34,6 +35,8 @@ for repo in repos:
     run(['rm', '-rf', repo])
     run(['git', 'clone', 'https://github.com/{}/{}.git'.format(org, repo)])
     os.chdir('{}/{}'.format(os.getcwd(), repo))
+    run(['git', 'checkout', basebranch])
+    run(['git', 'pull'])
     run(['git', 'checkout', '-b', 'feat/dependencylock'])
     with open('package.json') as json_file:
         package = json.load(json_file)
